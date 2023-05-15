@@ -11,6 +11,8 @@ services:
       MYSQL_DATABASE: ${MYSQL_DATABASE}
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    networks:
+      - wordpress-net
 
   wordpress:
     image: wordpress:latest
@@ -21,6 +23,8 @@ services:
       WORDPRESS_DB_USER: wordpress_user
       WORDPRESS_DB_PASSWORD: wordpress_pass
     restart: always
+    networks:
+      - wordpress-net
 
   webserver:
     image: nginx:latest
@@ -32,7 +36,12 @@ services:
     restart: always
     depends_on:
       - wordpress
+    networks:
+      - wordpress-net
 
 volumes:
   mysql_data: {}
   wordpress_data: {}
+
+networks:
+  wordpress-net:
