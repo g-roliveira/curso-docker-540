@@ -1,0 +1,28 @@
+version: '3.9'
+services:
+  postgres:
+    image: postgres:13
+    env_file: .env
+    volumes:
+      - netbox_postgres_data:/var/lib/postgresql/data
+  
+  redis:
+    image: redis:6-alpine
+    volumes:
+      - netbox_redis_data:/data
+  
+  netbox:
+    image: netboxcommunity/netbox:latest
+    depends_on:
+      - postgres
+      - redis
+    env_file: .env
+    volumes:
+      - netbox_media_files:/opt/netbox/netbox/media
+    ports:
+      - 8000:8000
+
+volumes:
+  netbox_media_files:
+  netbox_postgres_data:
+  netbox_redis_data:
